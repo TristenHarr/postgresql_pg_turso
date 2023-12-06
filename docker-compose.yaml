@@ -1,0 +1,24 @@
+version: '0.1'
+
+services:
+  
+  postgres:
+    build:
+      context: ./connector-pgturso
+      args:
+        OS: ${ZIG_OS}
+        ARCH: ${ZIG_ARCH}
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ${POSTGRESQL_CONF}:/postgresql.conf
+      - ${POSTGRESQL_SETUP}:/docker-entrypoint-initdb.d/00-setup.sql
+
+    restart: always
+
+volumes:
+  postgres_data:
